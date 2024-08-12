@@ -3,7 +3,7 @@
     <h1 sui-header [suiDividing]="true">Semantic form</h1>
   </header>
   <main>
-    <form sui-form (submit)="onSubmit(form)" #form="ngForm">
+    <form sui-form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
       <div suiFormField>
         <div suiFormFields suiWidth="two">
           <div suiFormField>
@@ -13,9 +13,17 @@
               name="first-name"
               id="first-name"
               placeholder="First Name"
-              required
-              [(ngModel)]="firstName"
+              formControlName="firstName"
             />
+            <div
+              *ngIf="
+                profileForm.get('firstName')?.hasError('required') &&
+                (submited || profileForm.get('firstName')?.touched)
+              "
+              class="ui pointing red basic label"
+            >
+              First Name is required
+            </div>
           </div>
           <div suiFormField>
             <label for="last-name">Last Name</label>
@@ -24,31 +32,94 @@
               name="last-name"
               id="last-name"
               placeholder="Last Name"
-              required
-              [(ngModel)]="lastName"
+              formControlName="lastName"
             />
+            <div
+              *ngIf="
+                profileForm.get('lastName')?.hasError('required') &&
+                (submited || profileForm.get('lastName')?.touched)
+              "
+              class="ui pointing red basic label"
+            >
+              Last Name is required
+            </div>
           </div>
         </div>
       </div>
       <div suiFormField>
         <label>E-mail</label>
         <input
-          [(ngModel)]="email"
           type="email"
           name="email"
           placeholder="john@doe.com"
           required
+          formControlName="email"
         />
+        <div
+          *ngIf="
+            (submited || profileForm.get('email')?.touched) &&
+            profileForm.get('email')?.invalid
+          "
+          class="ui pointing red basic label"
+        >
+          Please enter a valid email address
+        </div>
       </div>
+
+      <div suiFormField>
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <div
+          *ngIf="
+            profileForm.get('password')?.invalid &&
+            (submited ||
+              profileForm.get('password')?.touched ||
+              profileForm.get('password')?.dirty)
+          "
+          class="ui pointing red basic label"
+        >
+          Password must contain at least:
+          <ul>
+            <li
+              *ngIf="profileForm.get('password')?.errors?.['hasMinimumValue']"
+            >
+              8 characters;
+            </li>
+            <li *ngIf="profileForm.get('password')?.errors?.['hasUpperCase']">
+              one uppercase letter and
+            </li>
+            <li
+              *ngIf="profileForm.get('password')?.errors?.['hasSpecialCharacter']"
+            >
+              one special character.
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <div suiFormField>
         <label>Phone number</label>
         <input
           type="tel"
           name="phoneNumber"
           placeholder="+123-5435-5433"
-          [(ngModel)]="phoneNumber"
           required
+          formControlName="phoneNumber"
         />
+        <div
+          *ngIf="
+            profileForm.get('phoneNumber')?.hasError('required') &&
+            (submited || profileForm.get('phoneNumber')?.touched)
+          "
+          class="ui pointing red basic label"
+        >
+          Phone number is required
+        </div>
       </div>
 
       <div suiFormFields suiWidth="two">
@@ -58,19 +129,44 @@
             name="country"
             suiPlaceholder="Country"
             [suiOptions]="countries"
-            [(ngModel)]="country"
-            required
+            formControlName="country"
+            [suiError]="submited && profileForm.controls['country'].invalid"
+            [suiLoading]="!countries || countries.length == 0"
           ></sui-select>
+
+          <div
+            *ngIf="
+              profileForm.get('country')?.hasError('required') &&
+              (submited || profileForm.get('country')?.touched)
+            "
+            class="ui pointing red basic label"
+          >
+            Please select a country!
+          </div>
         </div>
+
         <div suiFormField>
           <label>Occupation</label>
           <sui-select
             name="occupation"
-            [(ngModel)]="occupation"
             suiPlaceholder="Occupation"
             [suiOptions]="occupations"
-            required
-          ></sui-select>
+            formControlName="occupation"
+            [suiError]="submited && profileForm.controls['occupation'].invalid"
+            [suiOptions]="occupations"
+            class="selection"
+          >
+            ></sui-select
+          >
+          <div
+            *ngIf="
+              profileForm.get('occupation')?.hasError('required') &&
+              (submited || profileForm.get('occupation')?.touched)
+            "
+            class="ui pointing red basic label"
+          >
+            Please select an occupation!
+          </div>
         </div>
       </div>
 
@@ -81,8 +177,7 @@
             type="radio"
             name="successful"
             value="true"
-            [(ngModel)]="successful"
-            required
+            formControlName="successful"
           />
           <label>True</label>
         </div>
@@ -93,13 +188,20 @@
             type="radio"
             name="successful"
             value="false"
-            [(ngModel)]="successful"
-            required
+            formControlName="successful"
           />
           <label>False</label>
         </div>
       </div>
-      <button sui-button type="submit" suiEmphasis="primary">Submit</button>
+      <button
+        sui-button
+        [suiLoading]="isLoading"
+        type="submit"
+        [disabled]="isLoading"
+        suiEmphasis="primary"
+      >
+        Submit
+      </button>
     </form>
   </main>
 
