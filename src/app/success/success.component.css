@@ -1,0 +1,19 @@
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: aliceblue;
+}
+.success-container > div {
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+}
+.success-container > div > div {
+  flex: none;
+}
+.button-container {
+  margin-top: 20px;
+}

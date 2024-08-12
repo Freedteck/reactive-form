@@ -1,0 +1,109 @@
+<div sui-container class="forms">
+  <header>
+    <h1 sui-header [suiDividing]="true">Semantic form</h1>
+  </header>
+  <main>
+    <form sui-form (submit)="onSubmit(form)" #form="ngForm">
+      <div suiFormField>
+        <div suiFormFields suiWidth="two">
+          <div suiFormField>
+            <label for="first-name">First Name</label>
+            <input
+              type="text"
+              name="first-name"
+              id="first-name"
+              placeholder="First Name"
+              required
+              [(ngModel)]="firstName"
+            />
+          </div>
+          <div suiFormField>
+            <label for="last-name">Last Name</label>
+            <input
+              type="text"
+              name="last-name"
+              id="last-name"
+              placeholder="Last Name"
+              required
+              [(ngModel)]="lastName"
+            />
+          </div>
+        </div>
+      </div>
+      <div suiFormField>
+        <label>E-mail</label>
+        <input
+          [(ngModel)]="email"
+          type="email"
+          name="email"
+          placeholder="john@doe.com"
+          required
+        />
+      </div>
+      <div suiFormField>
+        <label>Phone number</label>
+        <input
+          type="tel"
+          name="phoneNumber"
+          placeholder="+123-5435-5433"
+          [(ngModel)]="phoneNumber"
+          required
+        />
+      </div>
+
+      <div suiFormFields suiWidth="two">
+        <div suiFormField>
+          <label>Country</label>
+          <sui-select
+            name="country"
+            suiPlaceholder="Country"
+            [suiOptions]="countries"
+            [(ngModel)]="country"
+            required
+          ></sui-select>
+        </div>
+        <div suiFormField>
+          <label>Occupation</label>
+          <sui-select
+            name="occupation"
+            [(ngModel)]="occupation"
+            suiPlaceholder="Occupation"
+            [suiOptions]="occupations"
+            required
+          ></sui-select>
+        </div>
+      </div>
+
+      <div suiFormField>
+        <label>Successful</label>
+        <div class="ui radio checkbox">
+          <input
+            type="radio"
+            name="successful"
+            value="true"
+            [(ngModel)]="successful"
+            required
+          />
+          <label>True</label>
+        </div>
+      </div>
+      <div suiFormField>
+        <div class="ui radio checkbox">
+          <input
+            type="radio"
+            name="successful"
+            value="false"
+            [(ngModel)]="successful"
+            required
+          />
+          <label>False</label>
+        </div>
+      </div>
+      <button sui-button type="submit" suiEmphasis="primary">Submit</button>
+    </form>
+  </main>
+
+  <footer>
+    <div>semantic-form by Mubarak&copy;2024</div>
+  </footer>
+</div>
