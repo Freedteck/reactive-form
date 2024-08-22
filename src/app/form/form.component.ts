@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -20,13 +19,7 @@ import { CountryService } from '../country.service';
 @Component({
   selector: 'app-form',
   standalone: true,
-  imports: [
-    FormsModule,
-    HttpClientModule,
-    NgxSemanticModule,
-    ReactiveFormsModule,
-    CommonModule,
-  ],
+  imports: [FormsModule, NgxSemanticModule, ReactiveFormsModule, CommonModule],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css',
 })
@@ -41,6 +34,7 @@ export class FormComponent implements OnInit {
   ];
   submited: boolean = false;
   isLoading: boolean = false;
+  isError: boolean = true;
 
   // Initialize the form
   initializeForm() {
@@ -61,7 +55,7 @@ export class FormComponent implements OnInit {
     this.initializeForm();
   }
 
-  // Fetch countries from the API
+  // Load countries
   loadCountries() {
     this.countryService.fetchCountries().subscribe(
       (data: any) => {
@@ -83,13 +77,6 @@ export class FormComponent implements OnInit {
 
   // Inject the NotificationService
   notificationService: NotificationService = inject(NotificationService);
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private http: HttpClient,
-    private countryService: CountryService
-  ) {}
 
   // Custom password validator
   passwordValidator: ValidatorFn = (
@@ -116,6 +103,12 @@ export class FormComponent implements OnInit {
 
     return null;
   };
+
+  // Check if the form control is invalid
+  isInValid(controlName: string): boolean | undefined {
+    const control = this.profileForm.get(controlName);
+    return control?.invalid && (control?.dirty || control?.touched);
+  }
 
   // Submit the form
   onSubmit() {
@@ -148,4 +141,10 @@ export class FormComponent implements OnInit {
       this.isLoading = false;
     }
   }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private countryService: CountryService
+  ) {}
 }
