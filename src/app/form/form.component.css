@@ -1,8 +1,10 @@
-.forms {
+.container .forms {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 20px;
   height: 100%;
+}
+form {
+  width: 100%;
 }

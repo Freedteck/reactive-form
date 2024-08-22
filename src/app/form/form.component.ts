@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { NgxSemanticModule } from 'ngx-semantic';
 import { ISelectOption } from 'ngx-semantic/modules/select';
 import { NotificationService } from '../notification.service';
+import { CountryService } from '../country.service';
 
 @Component({
   selector: 'app-form',
@@ -55,16 +56,14 @@ export class FormComponent implements OnInit {
     });
   }
 
-  private url: string = 'https://restcountries.com/v3.1/all';
-
   ngOnInit() {
-    this.fetchCountries();
+    this.loadCountries();
     this.initializeForm();
   }
 
   // Fetch countries from the API
-  fetchCountries() {
-    this.http.get(this.url).subscribe(
+  loadCountries() {
+    this.countryService.fetchCountries().subscribe(
       (data: any) => {
         console.log(data);
 
@@ -88,7 +87,8 @@ export class FormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private countryService: CountryService
   ) {}
 
   // Custom password validator
